@@ -37,7 +37,13 @@ Proxy server listening at http://*:8080
 10.244.0.77:54946: client disconnect
 10.244.0.77:54946: server disconnect example.com:80 (93.184.216.34:80)
 ```
+### Variable Passdown Notes
+The passdown in `roles/ansibleproxydemo/taks/main.yml` specifies the
+environment variables using `lookup`.
+
+### Setup Notes
 
 In order to set the env vars in the Operator environment, I made use of
 `envsubst`. See the Makefile target `deploy` and
 `config/manager/manager.yaml:37` for how this works.
+
