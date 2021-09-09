@@ -35,18 +35,6 @@ spec:
           value: explicit
         - name: HTTP_PROXY
           value: $CLUSTER_PROXY_IP:$CLUSTER_PROXY_PORT
-        # - name: HTTP_PROXY
-        #   value: "http_proxy is set"
-        # - name: NO_PROXY
-        #   value: "http_proxy is set"
-        # - name: "https_proxy"
-        #   value: "https_proxy (lower) is set"
-        # - name: "http_proxy"
-        #   value: "http_proxy (lower) is set"
-        # - name: "no_proxy"
-        #   value: "no_proxy (lower) is set"
-        # - name: TESTENV
-        #   value: "please"
         securityContext:
           allowPrivilegeEscalation: false
         livenessProbe:
