@@ -1,0 +1,24 @@
+# permissions for end users to edit ansibleproxydemoes.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ansibleproxydemo-editor-role
+rules:
+- apiGroups:
+  - demo.example.com
+  resources:
+  - ansibleproxydemoes
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - demo.example.com
+  resources:
+  - ansibleproxydemoes/status
+  verbs:
+  - get

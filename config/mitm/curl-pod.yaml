@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-pod
+  namespace: default
+spec:
+  containers:
+    - name: ubi-minimal
+      image: registry.access.redhat.com/ubi8/ubi:8.4-209
+      command: ["/bin/sh", "-ec", "sleep 1000"]
+

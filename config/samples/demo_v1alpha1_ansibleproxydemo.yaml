@@ -1,0 +1,7 @@
+apiVersion: demo.example.com/v1alpha1
+kind: AnsibleProxyDemo
+metadata:
+  name: ansibleproxydemo-sample
+spec:
+  # Add fields here
+  foo: bar

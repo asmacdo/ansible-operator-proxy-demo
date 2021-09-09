@@ -1,0 +1,30 @@
+---
+- name: Fetch Proxy Service
+  set_fact:
+    proxy_svc: "{{ lookup('kubernetes.core.k8s', kind='Service', label_selector='proxy=mitm')[0] }}"
+# - debug:
+#     var: proxy_svc
+- name: Extract Cluster IP
+  set_fact:
+    proxy_cluster_ip: "{{ proxy_svc | community.general.json_query('spec.clusterIP') }}"
+- debug:
+    var: proxy_cluster_ip
+
+- name: start_proxyenv_testjob
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: batch/v1
+      kind: Job
+      metadata:
+        name: env-job
+        namespace: "{{ ansible_operator_meta.namespace }}"
+      spec:
+        template:
+          spec:
+            containers:
+              - name: curl-example
+                image: registry.access.redhat.com/ubi8/ubi:8.4-209
+                command: ["curl"]
+                args: ["--proxy", "{{ proxy_cluster_ip }}:8080", "example.com"]
+            restartPolicy: Never
+        backoffLimit: 4

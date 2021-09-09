@@ -1,0 +1,4 @@
+---
+# defaults file for AnsibleProxyDemo
+# ansible_operator_meta:
+#   namespace: default
