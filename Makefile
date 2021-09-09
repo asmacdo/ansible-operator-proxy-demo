@@ -84,21 +84,21 @@ mitm:
 	kubectl apply -f config/mitm/curl-pod.yaml
 
 rmitm: 
-	kubectl delete -f config/mitm/mitm-pod.yaml
-	kubectl delete -f config/mitm/mitm-service.yaml
-	kubectl delete -f config/mitm/curl-pod.yaml
+	kubectl delete -f config/mitm/mitm-pod.yaml --ignore-not-found=true
+	kubectl delete -f config/mitm/mitm-service.yaml --ignore-not-found=true
+	kubectl delete -f config/mitm/curl-pod.yaml --ignore-not-found=true
 
 dry: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	$(KUSTOMIZE) build config/default | CLUSTER_PROXY_IP=$(shell kubectl get service -n default mitm-proxy -o json | jq '.spec.clusterIP') CLUSTER_PROXY_PORT=$(shell kubectl get service -n default mitm-proxy -o json | jq '.spec.ports[0].port') envsubst
 
-deploy:
+deploy: mitm
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	$(KUSTOMIZE) build config/default | CLUSTER_PROXY_IP=$(shell kubectl get service -n default mitm-proxy -o json | jq '.spec.clusterIP') CLUSTER_PROXY_PORT=$(shell kubectl get service -n default mitm-proxy -o json | jq '.spec.ports[0].port') envsubst | kubectl apply -f -
 
 
-undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build config/default | kubectl delete -f -
+undeploy: rmitm ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
+	$(KUSTOMIZE) build config/default | kubectl delete -f - --ignore-not-found=true
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/')
